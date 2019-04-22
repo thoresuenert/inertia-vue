@@ -5,6 +5,14 @@ export default {
   props: {
     initialPage: Object,
     resolveComponent: Function,
+    beforeVisit: {
+      type: Function,
+      default: null
+    },
+    afterVisit: {
+      type: Function,
+      default: null
+    },
   },
   provide() {
     return {
@@ -20,12 +28,17 @@ export default {
     }
   },
   created() {
-    Inertia.init(this.initialPage, (page) => {
-      return Promise.resolve(this.resolveComponent(page.component)).then(instance => {
-        this.page.instance = instance
-        this.page.props = page.props
-      })
-    })
+    Inertia.init(
+      this.initialPage,
+      (page) => {
+        return Promise.resolve(this.resolveComponent(page.component)).then(instance => {
+          this.page.instance = instance
+          this.page.props = page.props
+        })
+      },
+      this.beforeVisit,
+      this.afterVisit
+    )
   },
   render(h) {
     if (this.page.instance) {
