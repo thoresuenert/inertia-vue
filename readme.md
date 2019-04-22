@@ -89,12 +89,16 @@ new Vue({
       resolveComponent: (component) => {
         return import(`@/Pages/${component}`).then(module => module.default)
       },
+      beforeVisit: () => { /* start loading indicator */ },
+      afterVisit: () => { /* stop loading indicator */ },
     },
   }),
 }).$mount(app)
 ~~~
 
 The `resolveComponent` is a callback that tells Inertia how to load a page component. This callback must return a promise with a page instance.
+
+The `beforeVisit` and `afterVisit` is an optional callback to overwrite the usage of [nprogress](http://ricostacruz.com/nprogress/) as a loading indicator. 
 
 ## Creating a base layout
 
